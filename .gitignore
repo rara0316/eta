@@ -175,7 +175,7 @@ cython_debug/
 
 
 # 추가 ignore files
-*.py
-*.css
-*.js
+
+
+blog
 *.gitignore
