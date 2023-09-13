@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE-edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/header.nav.css'%}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/board-client.css' %}"/>
+  <title>BOARD-CLIENT</title>
+</head>
+<body>
+  <header>
+    <nav>
+      <img src="{% static 'media/nav/MYLOG.svg' %}"/>
+      <ul>
+        <a href="#">일상</a>
+        <a href="#">요리</a>
+        <a href="#">여행</a>
+        <a href="#">영화</a>
+        <a href="#">IT</a>
+        <a href="#">Logout</a>
+        <a href="#">Just Write!</a>
+      </ul>
+    </nav>
+
+    <section>
+      <div>
+        <h3>Lorem ipsum dolor</h3>
+        <p>Lorem ipsum dolor sit amet consectetur. Non pretium arcu praesent cursus aliquam pellentesque. Euismod consectetur fames vitae nunc gravida morbi felis porttitor integer. Ridiculus id purus feugiat et mi justo scelerisque euismod euismod. Turpis dictumst luctus nisi placerat purus dolor luctus vitae pretium. Gravida faucibus scelerisque quis mi consequat malesuada.<p>
+        <a href="#" type="button">READ MORE</a>
+      </div>
+
+      <div>
+        <img src="{% static 'media/board-client-admin/header_img.svg' %}"/>
+      </div>
+    </section>
+  </header>
+
+
+
+  {% comment %} 컨테이너 하나 만들어서 그대로 복사 {% endcomment %}
+  <section>
+    <div class="container">
+      <div>
+        <img src="{% static 'media/board-client-admin/img_1.svg' %}"/>
+        <p>2023-09-07 12:13:01</p>
+      </div>
+
+      <div>
+        <h3>Lorem ipsum dolor</h3>
+        <p>Lorem ipsum dolor sit amet consectetur. Non pretium arcu praesent cursus aliquam pellentesque. Euismod consectetur fames vitae nunc gravida morbi felis porttitor integer. Ridiculus id purus feugiat et mi justo </p>
+      </div>
+    </div>
+  </section>

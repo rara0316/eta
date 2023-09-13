@@ -1,0 +1,18 @@
+안녕하세요
+<li class="nav-item">
+	<a class="nav-link active" href="{% url 'signup' %}">회원가입하기</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link active" href="{% url 'login_view' %}">로그인하기</a>
+ </li>
+
+ <li class="nav-item">
+	<a class="nav-link active" href="{% url 'logout' %}">로그아웃하기</a>
+</li>
+
+<div class="container">
+    <h3>Hello, {{ request.user }}</h3>
+    {% block content %}
+    {% endblock %}
+</div>
