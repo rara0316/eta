@@ -178,6 +178,3 @@ cython_debug/
 
 
 *.gitignore
-js
-css
-*.svg
