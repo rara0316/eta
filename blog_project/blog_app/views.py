@@ -13,7 +13,7 @@ from .forms import CustomLoginForm, BlogPostForm
 
 from .models import BlogPost
 
-import openai  # GPT-3 라이브러리
+# import openai   GPT-3 라이브러리
 
 
 # 로그인
@@ -173,7 +173,7 @@ class image_upload(View):
 
 
 # Chat gpt API 사용
-openai.api_key = ''
+# openai.api_key = ''
 
 # 글 자동완성 기능
 def autocomplete(request):

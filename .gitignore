@@ -178,3 +178,5 @@ cython_debug/
 
 
 *.gitignore
+*.jpg
+*.png
