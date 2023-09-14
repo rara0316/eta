@@ -21,7 +21,6 @@ def text_only(value):
     return text_content
 
 
-
 # 첫 번째 img 태그의 src 속성 값 찾아 반환함
 @register.filter(name='get_img_src')
 def get_img_src(value):
