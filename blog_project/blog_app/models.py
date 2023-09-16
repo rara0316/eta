@@ -6,7 +6,7 @@ class BlogPost(models.Model):
     content = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=255, default='전체')
-    temporary = models.CharField(max_length=1, default='Y') # 임시저장
+    publish = models.CharField(max_length=1, default='Y') # 임시저장
     views = models.PositiveIntegerField(default=0)
     author_id = models.CharField(max_length=50)
     
