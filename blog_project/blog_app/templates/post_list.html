@@ -25,15 +25,15 @@
     />
   </head>
   <body>
-    {% include 'blog_app/nav_bar.html' %}
+    {% include 'nav_bar.html' %}
     <div id="post-list" class="post-list">
       {% for post in posts %} {% if forloop.first %}
       <div class="first-post-box">
         <div class="container">
-          <a
+          {% comment %} <a
             href="{% url 'blog_app:post_detail' post.id %}"
             class="post-info-box-link"
-          >
+          > {% endcomment %}
             <div class="post-info-box">
               <h3>{{ post.title }}</h3>
               <p>{{ post.content|text_only }}</p>
@@ -60,10 +60,10 @@
               ></div>
               {% endif %}
             </div>
-            <a
+            {% comment %} <a
               href="{% url 'blog_app:post_detail' post.id %}"
               class="post-info-box-link"
-            >
+            > {% endcomment %}
               <div class="card-info-box">
                 <p>{{ post.created_at }}</p>
 
@@ -76,6 +76,6 @@
         </div>
       </div>
     </div>
-    {% include 'blog_app/footer.html' %}
+    {% include 'footer.html' %}
   </body>
 </html>

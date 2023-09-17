@@ -11,6 +11,16 @@ from rest_framework import generics
 from .serializers import BlogPostSerializer
 
 # Create your views here.
+
+# 첫화면으로 보여줄 화면입니다. post_list를 대신해 임시로 넣었습니다.
+# post_list.html링크를 수정할 필요가 있습니다.
+def index(request):
+    # 게시글 오브젝트
+    BlogPosts = BlogPost.objects.all() 
+    posts = {'posts':BlogPosts}
+    return render(request,'index.html', posts)
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('blog_app:login')
@@ -57,10 +67,11 @@ def post_list(request):
     else:
         posts = BlogPost.objects.filter(publish='Y').order_by('-views')
     
-    context = {
-        'posts: posts',
+    # dict형식을 잘못 작성하고 있었습니다.
+    posts = {
+        'posts': posts,
     }
-    return render(request, 'post_list.html', context)
+    return render(request, 'post_list.html', posts)
 
 # 포스트 restful api 뷰 생성
 class BlogPostList(generics.ListCreateAPIView):
