@@ -1,0 +1,7 @@
+DEBUG=True
+DB_NAME=test
+DB_USER=postgres
+DB_PASSWORD=1234
+DB_HOST=localhost
+DB_PORT=5432
+SECRET_KEY_MAIN = 'django-insecure-a)i*lg0^at-5=0r)$h+dbcvnya=x1ve7rwj2^2e1=sym@4(2$*'

@@ -1,8 +1,10 @@
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 
+# Create your models here.
 class BlogPost(models.Model):
     title = models.CharField(max_length=200)
-    content = models.TextField()
+    content = RichTextUploadingField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     topic = models.CharField(max_length=255, default='전체')
     publish = models.CharField(max_length=1, default='Y')

@@ -13,6 +13,7 @@ class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
         exclude = ['created_at']
+        fields = ['content']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
