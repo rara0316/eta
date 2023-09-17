@@ -10,4 +10,6 @@ urlpatterns = [
     # write part
     path('write/', views.write),
     path('image-upload/', image_upload.as_view(), name='image-upload'),
+
+    path('post_list/', views.post_list, name='post_list'),
 ]
