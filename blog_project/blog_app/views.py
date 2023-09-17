@@ -73,7 +73,7 @@ class CreateOrUpdatePostView(View):
 def get(self, request, post_id =None):
     post = get_object_or_404(BlogPost, id=post_id) if post_id else None
     form = BlogPostForm(instance=post)
-    context = {'form': form, 'post':post, 'edit_mode':post_id is not Null, 'MEDIA_URL':settings.MEDIA_URL}
+    context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
     return render(request, self.template_name, context)
 
 def post(self, request, post_id=None):
@@ -92,6 +92,6 @@ def post(self, request, post_id=None):
         post.save()
         return redirect('blog_app:post_detail', post_id=post.id)
         
-    context = {'form': form, 'post':post, 'edit_mode':post_id is not Null, 'MEDIA_URL':settings.MEDIA_URL}
+    context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
     return render(request, self.template_name, context)
             
