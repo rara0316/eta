@@ -33,7 +33,7 @@
           <a
             href="{% url 'blog_app:post_detail' post.id %}"
             class="post-info-box-link"
-          > 
+          >
             <div class="post-info-box">
               <h3>{{ post.title }}</h3>
               <p>{{ post.content|text_only }}</p>
@@ -62,7 +62,8 @@
             </div>
             <a
               href="{% url 'blog_app:post_detail' post.id %}"
-              class="post-info-box-link"> 
+              class="post-info-box-link"
+            >
               <div class="card-info-box">
                 <p>{{ post.created_at }}</p>
 
