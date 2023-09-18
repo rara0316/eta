@@ -29,8 +29,7 @@
         {% if user.is_authenticated %}
         <a href="{% url 'blog_app:logout' %}" class="logout-button">Logout</a>
 
-        {% comment %} <a href="{% url 'blog_app:create_or_update_post' %}"  class="primary-button"     style="color: #e1e0db"    >Just Write!</a> {% endcomment %}
-        <a href="" class="primary-button" style="color: #e1e0db">Just Write!</a>
+        <a href="{% url 'blog_app:create_or_update_post' %}"  class="primary-button"     style="color: #e1e0db"    >Just Write!</a>
 
         {% else %}
         <a
