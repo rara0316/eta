@@ -29,9 +29,9 @@
           <form method="POST">
             {% csrf_token %}
             <div class="write-box">
-                <input type="text" id="title" name="title" class="title" placeholder="제목" value="제목"/>
                 {{form.media}} <!-- ckeditor에 적용된 css 불어오기 -->
-                {{form.as_p}} 
+                <input type="text" id="title" name="title" class="title" placeholder="제목" value="제목"></input>
+                {{form.content}} 
             </div>
 
             <aside class="post-info-box">

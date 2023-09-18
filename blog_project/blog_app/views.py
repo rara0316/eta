@@ -9,6 +9,7 @@ from .forms import BlogPostForm
 from django.views import View
 from rest_framework import generics
 from .serializers import BlogPostSerializer
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -62,9 +63,9 @@ class image_upload(View):
         return JsonResponse({'location': file_url})
 
 def post_list(request,topic=None):
-    category = request.GET.get('category')
-    if category:
-        posts = BlogPost.objects.filter(category=category, publish='Y').order_by('-views')
+    # category = request.GET.get('category')
+    if topic:
+        posts = BlogPost.objects.filter(category=topic, publish='Y').order_by('-views')
     else:
         posts = BlogPost.objects.filter(publish='Y').order_by('-views')
     posts = BlogPost.objects.filter(publish='Y').order_by('-views')
@@ -81,30 +82,31 @@ class BlogPostList(generics.ListCreateAPIView):
     serializer_class = BlogPostSerializer
 
 class CreateOrUpdatePostView(View):
-    template_name = 'blog_app/write.html'
+    template_name = 'write.html'
     
-def get(self, request, post_id =None):
-    post = get_object_or_404(BlogPost, id=post_id) if post_id else None
-    form = BlogPostForm(instance=post)
-    context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
-    return render(request, self.template_name, context)
+    def get(self, request, post_id =None):
+        post = get_object_or_404(BlogPost, id=post_id) if post_id else None
+        form = BlogPostForm(instance=post)
+        context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
+        return render(request, self.template_name, context)
 
-def post(self, request, post_id=None):
-    post = get_object_or_404(BlogPost,id=post_id) if post_id else None
-    form = BlogPostForm(instance=post)
+    def post(self, request, post_id=None):
+        post = get_object_or_404(BlogPost,id=post_id) if post_id else None
+        form = BlogPostForm(request.POST, instance=post)
     
-    if form.is_valid():
-        post = form.save(commit=False)
+        if form.is_valid():
+            post = form.save(commit=False)
         
-        if 'delete-button' in request.POST:
-            post.delete()
-            return redirect('blog_app:post_list')
-        post.category = '전체' if not form.cleaned_data.get('topic') else form.cleaned_data.get('topic')
-        post.publish = 'N' if 'temp-save-button' in request.POST else 'Y'
-        post.author_id = request.user.username
-        post.save()
-        return redirect('blog_app:post_detail', post_id=post.id)
+            if 'delete-button' in request.POST:
+                post.delete()
+                return redirect('blog_app:post_list')
         
-    context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
-    return render(request, self.template_name, context)
-            
+            post.topic = '전체' if not form.cleaned_data.get('topic') else form.cleaned_data.get('topic')
+            post.publish = 'N' if 'temp-save-button' in request.POST else 'Y'
+            post.author_id = request.user.username
+            post.save()
+            return redirect('blog_app:post_detail', post_id=post.id)
+        
+        context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
+        return render(request, self.template_name, context)
+    
