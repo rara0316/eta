@@ -15,8 +15,8 @@ class BlogPostForm(forms.ModelForm):
         exclude = ['created_at']
         fields = ['content']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['topic'].required = False
-        self.fields['publish'].required = False
-        self.fields['views'].required = False
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['topic'].required = False
+    #     self.fields['publish'].required = False
+    #     self.fields['views'].required = False

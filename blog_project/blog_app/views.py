@@ -23,14 +23,14 @@ def index(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('blog_app:login')
+        return redirect('blog_app:post_list')
     
     else :
         form = CustomLoginForm(data=request.POST or None)
         if request.method == 'POST':
             if form.is_valid():
                 username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
+                password = form.cleaned_data['password']      
                 user = authenticate(request, username=username, password=password)
                 if user is not None and user.is_superuser:  # 슈퍼유저 계정 확인
                     login(request, user)
@@ -38,6 +38,7 @@ def login_view(request):
                 else:
                     # 슈퍼유저 계정이 아닌 경우 에러 메시지 처리
                     form.add_error(None, "다시 입력해주세요.")
+                    
 
     return render(request, 'login.html', {'form': form})
 
@@ -60,13 +61,14 @@ class image_upload(View):
         # 이미지 업로드가 끝나면 JSON으로 이미지 파일 url 변환
         return JsonResponse({'location': file_url})
 
-def post_list(request):
+def post_list(request,topic=None):
     category = request.GET.get('category')
     if category:
         posts = BlogPost.objects.filter(category=category, publish='Y').order_by('-views')
     else:
         posts = BlogPost.objects.filter(publish='Y').order_by('-views')
-    
+    posts = BlogPost.objects.filter(publish='Y').order_by('-views')
+
     # dict형식을 잘못 작성하고 있었습니다.
     posts = {
         'posts': posts,
