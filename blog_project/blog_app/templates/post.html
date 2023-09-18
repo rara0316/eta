@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/post.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
     <title>Document</title>
 </head>
 <body>
-    {% include 'blog_app/nav_bar_light.html' %}
+    {% include 'nav_bar_light.html' %}  
 <div class="container">
   <div class="box-divider">
     <!-- 본문 영역 -->
@@ -42,7 +43,7 @@
     {% if user.is_authenticated %}
       <div class="box-divider" style="gap: 10px">
         <!-- 수정 버튼 -->
-        <a href="{% url 'blog_app:create_or_update_post' post.id %}">
+        <a href="">
           <button class="edit-button">수정하기</button>
         </a>
 
@@ -85,7 +86,7 @@
     </div>
   {% endif %}
 </div>
-{% include 'blog_app/footer.html' %}
+{% include 'footer.html' %}
 </body>
 <script>
     document.querySelector('.share-button').addEventListener('click', () => {

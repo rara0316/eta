@@ -141,5 +141,5 @@ def post_detail(request, post_id):
         'MEDIA_URL': settings.MEDIA_URL,
     }
 
-    return render(request, 'blog_app/post.html', context)
+    return render(request, 'post.html', context)
 
