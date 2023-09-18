@@ -23,7 +23,8 @@ class BlogPost(models.Model):
 
 
 class ImageId(models.Model):
-    pass
+    
+    image = models.ImageField(upload_to = "images/", null=True, blank=True)
 
 class TitleImageId(models.Model):
     pass
