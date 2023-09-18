@@ -27,7 +27,7 @@ def login_view(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None and user.is_superuser:  # 슈퍼유저 계정 확인
                     login(request, user)
-                    return redirect('blog_app:login')  # 로그인 후 이동할 페이지 이름
+                    return redirect('blog_app:post_list')  # 로그인 후 이동할 페이지 이름
                 else:
                     # 슈퍼유저 계정이 아닌 경우 에러 메시지 처리
                     form.add_error(None, "다시 입력해주세요.")
