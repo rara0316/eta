@@ -46,8 +46,9 @@ def login_view(request):
     return render(request, 'login.html', {'form': form})
 
 def post_list(request,topic=None):
+    # category = request.GET.get('category')
     if topic:
-        posts = BlogPost.objects.filter(topic=topic, publish='Y').order_by('-views')
+        posts = BlogPost.objects.filter(category=topic, publish='Y').order_by('-views')
     else:
         posts = BlogPost.objects.filter(publish='Y').order_by('-views')
     # dict형식을 잘못 작성하고 있었습니다.

@@ -62,7 +62,6 @@ CKEDITOR_CONFIGS={
     'height': 400,
     'width': 1000,
   },
-    'uiColor' : ''
 }
 
 REST_FRAMEWORK = {
