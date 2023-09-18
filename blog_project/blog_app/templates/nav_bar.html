@@ -9,15 +9,20 @@
     </div>
     <div class="nav-buttons">
       <div class="nav-topics">
-        <a ><button>일상</button></a
+        <a href="{% url 'blog_app:post_list_by_topic' topic='일상' %}"
+          ><button>일상</button></a
         >
-        <a ><button>요리</button></a
+        <a href="{% url 'blog_app:post_list_by_topic' topic='요리' %}"
+          ><button>요리</button></a
         >
-        <a ><button>여행</button></a
+        <a href="{% url 'blog_app:post_list_by_topic' topic='여행' %}"
+          ><button>여행</button></a
         >
-        <a ><button>영화</button></a
+        <a href="{% url 'blog_app:post_list_by_topic' topic='영화' %}"
+          ><button>영화</button></a
         >
-        <a ><button>IT</button></a
+        <a href="{% url 'blog_app:post_list_by_topic' topic='IT' %}"
+          ><button>IT</button></a
         >
       </div>
       <div class="row-box">
