@@ -14,7 +14,18 @@ class BlogPostForm(forms.ModelForm):
         model = BlogPost
         exclude = ['created_at']
         fields = ['title', 'content']
+
+    def __init__(self, *args, **kwargs):
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({
+            'class': 'form-title'
+        })
+        self.fields['content'].widget.attrs.update({
+            'class': 'form-content'
+        })
         
+
+
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
     #     self.fields['topic'].required = False

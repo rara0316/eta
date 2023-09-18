@@ -12,6 +12,8 @@ from .serializers import BlogPostSerializer
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 
+from django.core.files.storage import FileSystemStorage  
+
 # Create your views here.
 
 # 첫화면으로 보여줄 화면입니다. post_list를 대신해 임시로 넣었습니다.
@@ -71,12 +73,14 @@ class CreateOrUpdatePostView(View):
         post = get_object_or_404(BlogPost, id=post_id) if post_id else None
         form = BlogPostForm(instance=post)
         context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
+        print("getgetgetegetegetetegegegegegegegege")
         return render(request, self.template_name, context)
 
     def post(self, request, post_id=None):
         post = get_object_or_404(BlogPost,id=post_id) if post_id else None
         form = BlogPostForm(request.POST, instance=post)
-        
+        print("postpostpsotpsotpsotpsotpsotpsotpsotpsotpsotsp")
+
         if form.is_valid():
             post = form.save(commit=False)
                     
@@ -93,7 +97,26 @@ class CreateOrUpdatePostView(View):
         return render(request, self.template_name, context)
     
 
-
+# def edit(request,  post_id =None):
+#         # 객체 가져오기
+#         post = get_object_or_404(BlogPost, pk=post_id)
+ 
+#         # 유저 다르면 돌려보내기
+#         # if blog.username != request.user.username:
+#         #       return redirect('home')
+ 
+#         # 입력된 내용 처리 -> POST
+#         if request.method == 'POST':
+#                 form = BlogPost(request.POST or None, instance=blog)
+#                 if form.is_valid(): # 잘입력된지 체크
+#                         post = form.save(commit=False)
+#                         post.save() # 저장하기
+#                         return redirect('/blog/'+str(blog.id))
+ 
+#         # 빈 페이지 띄워주는 기능 -> GET
+#         else :
+#                 form = BlogPost(instance=blog)
+#                 return render(request, 'edit.html', {'blog':blog,'form':form})
 
 
 
@@ -134,16 +157,14 @@ def post_detail(request, post_id):
     return render(request, 'post.html', context)
 
 
-class image_upload(View):
-    # 이미지 업로드 버튼 눌렀을 떄
-    def img_post(self, request):
-        file = request.FILES['file']
-        # 파일경로설정
-        filepath = 'uploads/' + file.name
-        print(filepath)
-        # 파일이름설정
-        filename = default_storage.save(filepath, file)
-        # 파일URL 만들기
-        file_url = settings.MEDIA_URL + filename
-        # 이미지 업로드가 끝나면 JSON으로 이미지 파일 url 변환
-        return JsonResponse({'location': file_url})
+def image_upload(request):
+    file = request.FILES['file']
+    # 파일경로설정
+    filepath = 'uploads/' + file.name
+    print(filepath)
+    # 파일이름설정
+    filename = default_storage.save(filepath, file)
+    # 파일URL 만들기
+    file_url = settings.MEDIA_URL + filename
+    # 이미지 업로드가 끝나면 JSON으로 이미지 파일 url 변환
+    return JsonResponse({'location': file_url})

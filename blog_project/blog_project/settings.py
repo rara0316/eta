@@ -43,27 +43,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'rest_framework',
     'blog_app',
-
     'ckeditor',
     'ckeditor_uploader',
 ]
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_IMAGE_BACKEND = "pillow" 
-CKEDITOR_UPLOAD_PATH = 'uploads/'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-CKEDITOR_CONFIGS={
-  'default': {
-    'toolbar': 'Full',
-    'height': 400,
-    'width': 1000,
-  },
-    'uiColor' : ''
-}
+
+# CKEDITOR_CONFIGS={
+#   'default': {
+#     'toolbar': 'Full',
+#     'height': 400,
+#     'width': 1000,
+#   },
+#     'uiColor' : ''
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -160,11 +159,8 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
