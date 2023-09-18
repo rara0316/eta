@@ -12,7 +12,6 @@ from .serializers import BlogPostSerializer
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 
-
 # Create your views here.
 
 # 첫화면으로 보여줄 화면입니다. post_list를 대신해 임시로 넣었습니다.
@@ -92,6 +91,9 @@ class CreateOrUpdatePostView(View):
 
         context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
         return render(request, self.template_name, context)
+    
+
+
 
 
 
@@ -134,7 +136,7 @@ def post_detail(request, post_id):
 
 class image_upload(View):
     # 이미지 업로드 버튼 눌렀을 떄
-    def post(self, request):
+    def img_post(self, request):
         file = request.FILES['file']
         # 파일경로설정
         filepath = 'uploads/' + file.name

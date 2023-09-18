@@ -8,19 +8,17 @@
 
   <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}"/>
   <link rel="stylesheet" type="text/css" href="{% static 'css/write.css' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css'%}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}"/>
   
   <script src="https://cdn.tiny.cloud/1/cig4n9ujjp5wqsgk6jqk8pcfi03mazpxf0hb3h3tz9129744/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
   
   
   <!-- 타이틀은 수정과 작성에 따른 변경 -->
-  <title>Write</title>
+  <title>{% if edit_mode %}포스트 수정{% else %}포스트 작성{% endif %}</title>
 </head>
 <body>
-  <header>
-      <img src="{% static 'img/logo.png' %}"/>
-  </header>
-
+  {% include 'nav_bar_light.html' %}
   <!-- 글 작성 부분 -->
   <section>
     <div class="container">
@@ -31,7 +29,7 @@
             <div class="write-box">
                 {{form.media}} <!-- ckeditor에 적용된 css 불어오기 -->
                 <input type="text" id="title" name="title" class="title" placeholder="제목" value="제목"/>
-                {{form.as_p}} 
+                {{form.content}} 
             </div>
 
             <aside class="post-info-box">
@@ -73,7 +71,7 @@
                     <div class="info">
                         <h2>UPLOAD INFO</h2>
                         <p>상태: 미발생</p> <!-- 상태에 따른 발행 미발행 출력으로 바꿔야함 -->
-                        <input type="file" name="file" id="imageUpload">
+                        <input type="file" name="file" id="imageUpload" style="display:none;">
                         <button type="button" class="button-line" onclick="document.getElementById('imageUpload').click();">이미지 업로드</button>
                     </div>
 

@@ -44,7 +44,7 @@
       <div class="box-divider" style="gap: 10px">
         <!-- 수정 버튼 -->
        {% comment %} <a href="{% url 'blog_app:create_or_update_post' post.id %}"> {% endcomment %}
-        <a href="">
+        <a href="{% url 'blog_app:edit_post' post.id %}">
           <button class="edit-button">수정하기</button>
         </a>
 
