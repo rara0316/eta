@@ -9,16 +9,19 @@ from .forms import BlogPostForm
 from django.views import View
 from rest_framework import generics
 from .serializers import BlogPostSerializer
+from bs4 import BeautifulSoup
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
 # 첫화면으로 보여줄 화면입니다. post_list를 대신해 임시로 넣었습니다.
 # post_list.html링크를 수정할 필요가 있습니다.
-def index(request):
-    # 게시글 오브젝트
-    BlogPosts = BlogPost.objects.all() 
-    posts = {'posts':BlogPosts}
-    return render(request,'index.html', posts)
+# def index(request):
+#     # 게시글 오브젝트
+#     BlogPosts = BlogPost.objects.all() 
+#     posts = {'posts':BlogPosts}
+#     return render(request,'index.html', posts)
 
 
 def login_view(request):
@@ -42,11 +45,93 @@ def login_view(request):
 
     return render(request, 'login.html', {'form': form})
 
-def write(request):
-    form = BlogPostForm()
-    return render(request, 'write.html', {'form': form})
+def post_list(request,topic=None):
+    if topic:
+        posts = BlogPost.objects.filter(topic=topic, publish='Y').order_by('-views')
+    else:
+        posts = BlogPost.objects.filter(publish='Y').order_by('-views')
+    # dict형식을 잘못 작성하고 있었습니다.
+    posts = {
+        'posts': posts,
+    }
+    return render(request, 'post_list.html', posts)
+
+
+
+
+
+# 포스트 restful api 뷰 생성
+class BlogPostList(generics.ListCreateAPIView):
+    queryset = BlogPost.objects.all()
+    serializer_class = BlogPostSerializer
+
+class CreateOrUpdatePostView(View):
+    template_name = 'write.html'
+    
+    def get(self, request, post_id =None):
+        post = get_object_or_404(BlogPost, id=post_id) if post_id else None
+        form = BlogPostForm(instance=post)
+        context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
+        return render(request, self.template_name, context)
+
+    def post(self, request, post_id=None):
+        post = get_object_or_404(BlogPost,id=post_id) if post_id else None
+        form = BlogPostForm(request.POST, instance=post)
+        
+        if form.is_valid():
+            post = form.save(commit=False)
+                    
+            if 'delete-button' in request.POST:
+                            post.delete()
+                            return redirect('blog_app:post_list')
+            post.topic = '전체' if not form.cleaned_data.get('topic') else form.cleaned_data.get('topic')
+            post.publish = 'N' if 'temp-save-button' in request.POST else 'Y'
+            post.author_id = request.user.username
+            post.save()
+            return redirect('blog_app:post_detail', post_id=post.id)
+
+        context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
+        return render(request, self.template_name, context)
+
+
+
 
 #이미지 업로드
+
+def post_detail(request, post_id):
+    post = get_object_or_404(BlogPost, id=post_id)
+
+    if request.method == 'POST' and 'delete-button' in request.POST:
+        post.delete()
+        return redirect('blog_app:post_list')
+
+    # 조회수 증가
+    post.views += 1
+    post.save()
+
+    # 이전 및 다음 게시물 가져오기
+    previous_post = BlogPost.objects.filter(id__lt=post.id, publish='Y').order_by('-id').first()
+    next_post = BlogPost.objects.filter(id__gt=post.id, publish='Y').order_by('id').first()
+
+    # 게시글과 같은 주제 최신글 가져오기
+    recommended_posts = BlogPost.objects.filter(topic=post.topic, publish='Y').exclude(id=post.id).order_by('-created_at')[:2]
+
+    # 게시물 내용 첫번째 이미지 태그 추출
+    for recommended_post in recommended_posts:
+        soup = BeautifulSoup(recommended_post.content, 'html.parser')
+        recommended_post.image_tag = str(soup.find('img')) if 'img' in soup else ''
+
+    context = {
+        'post': post,
+        'previous_post': previous_post,
+        'next_post': next_post,
+        'recommended_posts': recommended_posts,
+        'MEDIA_URL': settings.MEDIA_URL,
+    }
+
+    return render(request, 'post.html', context)
+
+
 class image_upload(View):
     # 이미지 업로드 버튼 눌렀을 떄
     def post(self, request):
@@ -60,51 +145,3 @@ class image_upload(View):
         file_url = settings.MEDIA_URL + filename
         # 이미지 업로드가 끝나면 JSON으로 이미지 파일 url 변환
         return JsonResponse({'location': file_url})
-
-def post_list(request,topic=None):
-    category = request.GET.get('category')
-    if category:
-        posts = BlogPost.objects.filter(category=category, publish='Y').order_by('-views')
-    else:
-        posts = BlogPost.objects.filter(publish='Y').order_by('-views')
-    posts = BlogPost.objects.filter(publish='Y').order_by('-views')
-
-    # dict형식을 잘못 작성하고 있었습니다.
-    posts = {
-        'posts': posts,
-    }
-    return render(request, 'post_list.html', posts)
-
-# 포스트 restful api 뷰 생성
-class BlogPostList(generics.ListCreateAPIView):
-    queryset = BlogPost.objects.all()
-    serializer_class = BlogPostSerializer
-
-class CreateOrUpdatePostView(View):
-    template_name = 'blog_app/write.html'
-    
-def get(self, request, post_id =None):
-    post = get_object_or_404(BlogPost, id=post_id) if post_id else None
-    form = BlogPostForm(instance=post)
-    context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
-    return render(request, self.template_name, context)
-
-def post(self, request, post_id=None):
-    post = get_object_or_404(BlogPost,id=post_id) if post_id else None
-    form = BlogPostForm(instance=post)
-    
-    if form.is_valid():
-        post = form.save(commit=False)
-        
-        if 'delete-button' in request.POST:
-            post.delete()
-            return redirect('blog_app:post_list')
-        post.category = '전체' if not form.cleaned_data.get('topic') else form.cleaned_data.get('topic')
-        post.publish = 'N' if 'temp-save-button' in request.POST else 'Y'
-        post.author_id = request.user.username
-        post.save()
-        return redirect('blog_app:post_detail', post_id=post.id)
-        
-    context = {'form': form, 'post':post, 'edit_mode':post_id is not None, 'MEDIA_URL':settings.MEDIA_URL}
-    return render(request, self.template_name, context)
-            
