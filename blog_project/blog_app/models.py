@@ -20,7 +20,11 @@ class BlogPost(models.Model):
         self.content = self.content.replace('"..', '"')
         super().save(*args, **kwargs)
 
-
+class Comment(models.Model):
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    author = models.CharField(max_length=255, default="User")  # 기본값을 "User"로 설정
+    text = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
 
 class ImageId(models.Model):
     
