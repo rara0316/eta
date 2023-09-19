@@ -37,6 +37,9 @@
                 <button type="button" id="aiAutocompleteButton" class="ai-button">
                     <!-- 로봇아이콘 -->
                     <img id="ai-img" src="{% static 'img/ai.svg' %}" alt="AI 아이콘" />
+                    <div id="loading-animation" style="display: none;">
+                      <img src="{% static 'img/loading.gif' %}" alt="로딩 중" />
+                    </div> 
                     Ai 글 자동완성
                 </button>
 
@@ -112,7 +115,6 @@
       let formData = new FormData();
   
       formData.append('file', this.files[0]);
-      console.log(formData)
 
       fetch('{% url "blog_app:image_upload" %}', {
         method: 'POST',
@@ -122,27 +124,75 @@
         }
       })
       .then(response => response.json())
-      .then(data => {
-        console.log(data.location);
+      .then(data => {        
         imageIntoContent(data.location);
       })
       .catch(error => console.error('Error:', error));
     });
 
+    // AI 글 자동완성
+    document.getElementById('aiAutocompleteButton').addEventListener('click', function() {
+    // 로딩 애니메이션 
+    document.getElementById('loading-animation').style.display = 'block';
+    document.getElementById('ai-img').style.display = 'none';
+
+    let title = document.getElementById('id_title').value;
+    console.log(title);
+    fetch('/autocomplete/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': '{{ csrf_token }}',
+      },
+      body: new URLSearchParams({
+        'title': title
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('loading-animation').style.display = 'none';
+      document.getElementById('ai-img').style.display = 'block';
+  
+      //기존 내용에 자동완성 된 내용 더함
+    data.message = data.message.replace(/\n/g, '<br>');
+      
+    aiAutoInToContent(data.message);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      document.getElementById('loading-animation').style.display = 'none';
+    });
+  });
+
+    function aiAutoInToContent(autocontent){
+      
+      var contentFiled= CKEDITOR.instances.id_content;
+
+      contentFiled.insertHtml( autocontent );
+    }
 
     function imageIntoContent(iamge_url){
       // let formData = new FormData();
       // formData.append('file', this.files[0]);
       var imageFile = CKEDITOR.instances.id_content;
       var value =  "<img src='"+ iamge_url +"'/>";
-
-      // Check the active editing mode.
+      if (isEmpty(iamge_url))
+       return false
+        // Check the active editing mode.
       if ( imageFile.mode == 'wysiwyg' )
-      {
+        {
         // Insert the desired HTML.
         imageFile.insertHtml( value );
       }
       else
         alert( '업로드경고' );
-    }
+      }
+
+    function isEmpty(str){         
+      if(typeof str == "undefined" || str == null || str == "")
+        return true;
+      else
+        return false ;
+      }
+  
   </script>
