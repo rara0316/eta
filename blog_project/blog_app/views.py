@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CustomLoginForm
-from .models import BlogPost
+from .forms import CustomLoginForm, CommentForm
+from .models import BlogPost, Comment
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.http import JsonResponse
@@ -11,6 +11,7 @@ from rest_framework import generics
 from .serializers import BlogPostSerializer
 from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 from django.core.files.storage import FileSystemStorage  
 import openai  # GPT-3 라이브러리
@@ -120,32 +121,56 @@ class CreateOrUpdatePostView(View):
 #                 return render(request, 'edit.html', {'blog':blog,'form':form})
 
 
+def add_comment(request, post_id):
+    post = get_object_or_404(BlogPost, id=post_id)
 
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+
+            # 댓글을 저장한 후 해당 게시물 상세 페이지로 리디렉션
+            return redirect(reverse('blog_app:post_detail', args=[post_id]))
+    else:
+        form = CommentForm()
+
+    # 댓글 작성에 실패하면 여기로 돌아갈 수 있도록 설정할 수 있습니다.
+    return redirect(reverse('blog_app:post_detail', args=[post_id]))
 
 #이미지 업로드
 
 def post_detail(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
 
-    if request.method == 'POST' and 'delete-button' in request.POST:
-        post.delete()
-        return redirect('blog_app:post_list')
 
-    # 조회수 증가
-    post.views += 1
-    post.save()
+    if request.method == 'POST': 
+        # 요청에 삭제가 포함된경우
+        if 'delete-button' in request.POST:
+            post.delete()
+            return redirect('blog_app:post_list')
+      # 조회수 증가 및 db에 저장
+    post.views += 1 
+    post.save() 
+
+    # 이전/다음 게시물 가져옴
 
     # 이전 및 다음 게시물 가져오기
     previous_post = BlogPost.objects.filter(id__lt=post.id, publish='Y').order_by('-id').first()
     next_post = BlogPost.objects.filter(id__gt=post.id, publish='Y').order_by('id').first()
 
-    # 게시글과 같은 주제 최신글 가져오기
+    # 게시물 내용에서 첫번째 이미지(썸네일) 태그 추출
     recommended_posts = BlogPost.objects.filter(topic=post.topic, publish='Y').exclude(id=post.id).order_by('-created_at')[:2]
 
     # 게시물 내용 첫번째 이미지 태그 추출
     for recommended_post in recommended_posts:
         soup = BeautifulSoup(recommended_post.content, 'html.parser')
-        recommended_post.image_tag = str(soup.find('img')) if 'img' in soup else ''
+        image_tag = soup.find('img')
+        recommended_post.image_tag = str(image_tag) if image_tag else ''
+
+    comments = Comment.objects.filter(post=post).order_by('-created_date')
 
     context = {
         'post': post,
@@ -153,6 +178,8 @@ def post_detail(request, post_id):
         'next_post': next_post,
         'recommended_posts': recommended_posts,
         'MEDIA_URL': settings.MEDIA_URL,
+        'comments': comments,
+        'form': CommentForm(),
     }
 
     return render(request, 'post.html', context)

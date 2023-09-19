@@ -166,7 +166,7 @@
 
     function aiAutoInToContent(autocontent){
       
-      var contentFiled= CKEDITOR.instances.id_content;
+      var contentFiled= ClassicEditor.instances.id_content;
 
       contentFiled.insertHtml( autocontent );
     }
@@ -174,7 +174,7 @@
     function imageIntoContent(iamge_url){
       // let formData = new FormData();
       // formData.append('file', this.files[0]);
-      var imageFile = CKEDITOR.instances.id_content;
+      var imageFile = ClassicEditor.instances.id_content;
       var value =  "<img src='"+ iamge_url +"'/>";
       if (isEmpty(iamge_url))
        return false

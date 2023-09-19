@@ -19,5 +19,6 @@ urlpatterns = [
     path('image-upload/', image_upload, name='image_upload'),   
 
     path('autocomplete/', views.autocomplete, name='autocomplete'),
+    path('post/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
 
 ]
