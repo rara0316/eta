@@ -17,14 +17,25 @@ class BlogPostForm(forms.ModelForm):
         fields = ('title', 'content')
 
         widgets = {
+            'title': forms.TextInput(attrs={
+                'class': "form-control",
+                'style':'border: 2px solid #dbdbdb; padding: 11px 16px; font-size: 16px; ',
+                'placeholder': '제목을 입력하세요'
+                }),
             "content": CKEditor5Widget(
                 attrs={"class": "django_ckeditor_5"}, config_name="extends"
             )
         }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["title"].required = False
         self.fields["content"].required = False        
+
+
+
+
+
 
 class CommentForm(forms.ModelForm):
     class Meta:

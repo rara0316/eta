@@ -198,7 +198,7 @@ def image_upload(request):
 
 
 # Chat gpt API 사용
-openai.api_key = ''
+openai.api_key = ""
 
 # 글 자동완성 기능
 def autocomplete(request):
@@ -220,3 +220,7 @@ def autocomplete(request):
             message = str(e)
         return JsonResponse({"message": message})
     return render(request, 'autocomplete.html')
+
+
+def ai_support(request):
+    return render(request, 'ai_support.html')

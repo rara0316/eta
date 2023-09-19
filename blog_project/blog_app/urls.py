@@ -20,5 +20,5 @@ urlpatterns = [
 
     path('autocomplete/', views.autocomplete, name='autocomplete'),
     path('post/<int:post_id>/add_comment/', views.add_comment, name='add_comment'),
-
+    path('write/ai_support',views.ai_support, name='ai_support')
 ]

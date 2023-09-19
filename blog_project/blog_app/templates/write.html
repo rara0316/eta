@@ -81,7 +81,7 @@
                         border-radius: 4px;
                         color: white;
                         cursor: pointer;">
-                          이미지 업로드
+                          파일 업로드
                         </label>
                         <input type="file" name="file" id="imageUpload" style="display:none;" onclick="imageIntoContent()">
 
@@ -111,6 +111,7 @@
 <!-- <script src="{% static 'js/write.js' %}"></script> -->
 
 <script>
+  // 이미지 업로드 영역
   document.getElementById('imageUpload').addEventListener('change', function() {
       let formData = new FormData();
   
@@ -124,12 +125,15 @@
         }
       })
       .then(response => response.json())
-      .then(data => {        
-        imageIntoContent(data.location);
+      .then(data => {      
+        alert("서버에 파일을 업로드 하였습니다.")
+
+          //지금은 작동아 
+        // imageIntoContent(data.location);
       })
       .catch(error => console.error('Error:', error));
     });
-
+///////////////////////
     // AI 글 자동완성
     document.getElementById('aiAutocompleteButton').addEventListener('click', function() {
     // 로딩 애니메이션 
@@ -137,7 +141,6 @@
     document.getElementById('ai-img').style.display = 'none';
 
     let title = document.getElementById('id_title').value;
-    console.log(title);
     fetch('/autocomplete/', {
       method: 'POST',
       headers: {
@@ -155,8 +158,8 @@
   
       //기존 내용에 자동완성 된 내용 더함
     data.message = data.message.replace(/\n/g, '<br>');
-      
-    aiAutoInToContent(data.message);
+    console.log(data.message)
+    aiAutoInToContent(data);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -164,17 +167,24 @@
     });
   });
 
-    function aiAutoInToContent(autocontent){
-      
-      var contentFiled= ClassicEditor.instances.id_content;
 
-      contentFiled.insertHtml( autocontent );
+
+
+    function aiAutoInToContent(autocontent){
+      let options = "toolbar=no,scrollbars=no,resizable=yes,status=no,menubar=no,width=1200, height=800, top=0,left=0";
+
+      localStorage.setItem("inputData", JSON.stringify(autocontent));
+      window.open('./ai_support?data=title','AI자동입력',options);
     }
+
+
+
 
     function imageIntoContent(iamge_url){
       // let formData = new FormData();
       // formData.append('file', this.files[0]);
-      var imageFile = ClassicEditor.instances.id_content;
+      var imageFile = Cla.instances.id_content;
+      console.log(imageFile)
       var value =  "<img src='"+ iamge_url +"'/>";
       if (isEmpty(iamge_url))
        return false
