@@ -23,11 +23,4 @@ class BlogPostForm(forms.ModelForm):
         self.fields['content'].widget.attrs.update({
             'class': 'form-content'
         })
-        
 
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['topic'].required = False
-    #     self.fields['publish'].required = False
-    #     self.fields['views'].required = False

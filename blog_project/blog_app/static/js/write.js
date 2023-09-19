@@ -13,7 +13,21 @@
 //   const files = event.target.files
 //   output.textContent = Array.from(files).map(file => file.name).join('\n')
 // })
+function imageIntoContent(iamge_url){
 
+  var imageFile = CKEDITOR.instances.id_content;
+  // 저장된 이미지 주소를 가져와서 img로 보이게 img태그를 붙임
+  var value =  "<img src='"+ iamge_url +"'/>";
+
+  // 커서에서 위치잡도록 설정
+  if ( imageFile.mode == 'wysiwyg' )
+  {
+    // 이미지를 ck에 넣어줌
+    imageFile.insertHtml( value );
+  }
+  else
+    alert( '업로드경고' );
+}
 //페이지 작성후 불러오기
 // document.addEventListener('DOMContentLoaded', (event) => {
 
@@ -22,7 +36,6 @@
     let formData = new FormData();
 
     formData.append('file', this.files[0]);
-    console.log(formData)
 
     fetch('{% url "blog_app:image_upload" %}', {
       method: 'POST',
@@ -35,27 +48,14 @@
     .then(data => {
       console.log(data.location);
       // ckedit에서 이미지 업로드함수
-      imageIntoContent(data.location);
+      console.log(111111)
+       imageIntoContent(data.location);
     })
     .catch(error => console.error('Error:', error));
   });
 
 
-  function imageIntoContent(iamge_url){
 
-    var imageFile = CKEDITOR.instances.id_content;
-    // 저장된 이미지 주소를 가져와서 img로 보이게 img태그를 붙임
-    var value =  "<img src='"+ iamge_url +"'/>";
-
-    // 커서에서 위치잡도록 설정
-    if ( imageFile.mode == 'wysiwyg' )
-    {
-      // 이미지를 ck에 넣어줌
-      imageFile.insertHtml( value );
-    }
-    else
-      alert( '업로드경고' );
-  }
 
 
 // //이미지 업로드

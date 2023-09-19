@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 
 from django.core.files.storage import FileSystemStorage  
+import openai  # GPT-3 라이브러리
 
 # Create your views here.
 
@@ -87,7 +88,7 @@ class CreateOrUpdatePostView(View):
             if 'delete-button' in request.POST:
                             post.delete()
                             return redirect('blog_app:post_list')
-            post.topic = '전체' if not form.cleaned_data.get('topic') else form.cleaned_data.get('topic')
+            post.topic = request.POST['topic'] 
             post.publish = 'N' if 'temp-save-button' in request.POST else 'Y'
             post.author_id = request.user.username
             post.save()
@@ -161,10 +162,34 @@ def image_upload(request):
     file = request.FILES['file']
     # 파일경로설정
     filepath = 'uploads/' + file.name
-    print(filepath)
     # 파일이름설정
     filename = default_storage.save(filepath, file)
     # 파일URL 만들기
     file_url = settings.MEDIA_URL + filename
     # 이미지 업로드가 끝나면 JSON으로 이미지 파일 url 변환
     return JsonResponse({'location': file_url})
+
+
+# Chat gpt API 사용
+openai.api_key = ''
+
+# 글 자동완성 기능
+def autocomplete(request):
+    if request.method == "POST":
+
+        #제목 필드값 가져옴
+        prompt = request.POST.get('title')
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            # 반환된 응답에서 텍스트 추출해 변수에 저장
+            message = response['choices'][0]['message']['content']
+        except Exception as e:
+            message = str(e)
+        return JsonResponse({"message": message})
+    return render(request, 'autocomplete.html')

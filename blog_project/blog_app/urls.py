@@ -18,5 +18,6 @@ urlpatterns = [
     path('write/',CreateOrUpdatePostView.as_view(), name='create_or_update_post'),
     path('image-upload/', image_upload, name='image_upload'),   
 
+    path('autocomplete/', views.autocomplete, name='autocomplete'),
 
 ]
