@@ -8,6 +8,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/post.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav_bar_light.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <link href="{% static 'django_ckeditor_5/dist/styles.css' %}" type="text/css" media="all" rel="stylesheet">
+
+
     <title>Document</title>
 </head>
 <body>
@@ -22,7 +27,7 @@
         <h5>by {{ post.author_id }}</h5>
         <h5 class="topic-box">{{ post.topic }}</h5>
       </div>
-      <div class="post-content">{{ post.content | safe }}</div>
+      <div class="ck ck-content">{{ post.content | safe }}</div>
     </div>
 
     <!-- 추천글 영역 -->
@@ -114,4 +119,6 @@
         }
     }
 </script>
+<script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
+
 </html>

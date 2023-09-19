@@ -1,5 +1,6 @@
 from django import forms
 from .models import BlogPost
+from django_ckeditor_5.widgets import CKEditor5Widget
 
 class CustomLoginForm(forms.Form):
     username = forms.CharField(
@@ -13,14 +14,14 @@ class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
         exclude = ['created_at']
-        fields = ['title', 'content']
+        fields = ('title', 'content')
 
+        widgets = {
+            "content": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="extends"
+            )
+        }
     def __init__(self, *args, **kwargs):
-        super(forms.ModelForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({
-            'class': 'form-title'
-        })
-        self.fields['content'].widget.attrs.update({
-            'class': 'form-content'
-        })
-
+        super().__init__(*args, **kwargs)
+        self.fields["title"].required = False
+        self.fields["content"].required = False        
