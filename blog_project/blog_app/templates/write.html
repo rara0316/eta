@@ -26,7 +26,7 @@
     <div class="container">
         <!-- 글작성부분 + Ai 글 자동완성, TOPIC, UPLOAD INFO, 버튼(임시저장, 글 작성) 구분짓는 div -->
         <div class="big-box">
-          <form method="POST" action="{% url 'blog_app:create_or_update_post' %}" enctype="multipart/form-data">
+          <form method="POST" action="{% if edit_mode %}{% else %}{% url 'blog_app:create_or_update_post' %}{% endif %}" enctype="multipart/form-data">
             <div class="write-box">
                 {{form.media}} <!-- ckeditor에 적용된 css 불어오기 -->
                 {% csrf_token %}
