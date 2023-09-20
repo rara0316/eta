@@ -10,7 +10,7 @@
     <title>AI 자동완성 글</title>
 </head>
 <body>
-    <button id="btn_textarea_copy">textarea 전체 복사하기</button><br>
+    <button id="btn_textarea_copy">textarea 전체 복사하기/초기화</button><br>
     <textarea   
     id="content"
     name="content"
@@ -20,11 +20,10 @@
 </html>
 <script>
           //기존 내용에 자동완성 된 내용 더함
-    var data = JSON.parse(localStorage.getItem("inputData")); 
+    var data = localStorage.getItem("inputData"); 
 
-    currentContent = document.getElementById("content").value
-    data.message = data.message.replace(/\n/g, '<br>');
-    document.getElementById("content").value= (currentContent + data.message);
+
+    document.getElementById("content").value= data;
 
 
     //복사하기
@@ -33,6 +32,8 @@
         textArea.select();
         document.execCommand('copy');
         alert('클립보드에 저장되었습니다')
+        localStorage.setItem("inputData", "");
+        document.getElementById("content").value= "";
 
     }
 
