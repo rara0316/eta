@@ -198,7 +198,7 @@ def image_upload(request):
 
 
 # Chat gpt API 사용
-openai.api_key = ""
+openai.api_key = "sk-"
 
 # 글 자동완성 기능
 def autocomplete(request):

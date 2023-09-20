@@ -31,65 +31,51 @@
     </div>
 
     <!-- 추천글 영역 -->
-    <div class="small-box">
-      <h3>Other posts you may like</h3>
-      {% for recommended_post in recommended_posts %}
-        <div class="recommend-box">
-          <a href="{% url 'blog_app:post_detail' recommended_post.id %}">
-            {{ recommended_post.image_tag|safe }}
-            {{ recommended_post.title }}
+    <div class="button-box">
+      {% if user.is_authenticated %}
+        <div class="box-divider" style="gap: 10px">
+          <!-- 수정 버튼 -->
+         {% comment %} <a href="{% url 'blog_app:create_or_update_post' post.id %}"> {% endcomment %}
+          <a href="{% url 'blog_app:edit_post' post.id %}">
+            <button class="edit-button">수정하기</button>
           </a>
+  
+          <!-- 삭제 버튼 -->
+          <form method="POST" action="{% url 'blog_app:post_detail' post.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="delete-button" value="true">
+            <!-- 삭제 버튼에 onclick 이벤트 추가 -->
+            <button type="button" class="delete-button" onclick="confirmDelete()">삭제하기</button>
+        </form>
         </div>
-      {% endfor %}
+  
+            <!-- 공유 버튼 -->
+      <button class="share-button">공유하기</button>
     </div>
-  </div>
-
-  <div class="button-box">
+      {% endif %}
+  
+    <div class="comments">
+      <h3>댓글</h3>
+      <ul>
+        {% for comment in comments %}
+          <li>
+            <p class="author">{{ comment.author }}:</p>
+            <p class="text">{{ comment.text }}</p>
+          </li>
+        {% empty %}
+          <li>댓글이 없습니다.</li>
+        {% endfor %}
+      </ul>
+    </div>
     {% if user.is_authenticated %}
-      <div class="box-divider" style="gap: 10px">
-        <!-- 수정 버튼 -->
-       {% comment %} <a href="{% url 'blog_app:create_or_update_post' post.id %}"> {% endcomment %}
-        <a href="{% url 'blog_app:edit_post' post.id %}">
-          <button class="edit-button">수정하기</button>
-        </a>
-
-        <!-- 삭제 버튼 -->
-        <form method="POST" action="{% url 'blog_app:post_detail' post.id %}">
-          {% csrf_token %}
-          <input type="hidden" name="delete-button" value="true">
-          <!-- 삭제 버튼에 onclick 이벤트 추가 -->
-          <button type="button" class="delete-button" onclick="confirmDelete()">삭제하기</button>
-      </form>
-      </div>
-
-          <!-- 공유 버튼 -->
-    <button class="share-button">공유하기</button>
-  </div>
+    <form method="post" action="{% url 'blog_app:add_comment' post_id=post.id %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class='comment-button' type="submit">댓글 작성</button>
+    </form>
+    {% else %}
+      <p>댓글을 작성하려면 로그인이 필요합니다.</p>
     {% endif %}
-
-  <div class="comments">
-    <h3>댓글</h3>
-    <ul>
-      {% for comment in comments %}
-        <li>
-          <p class="author">{{ comment.author }}:</p>
-          <p class="text">{{ comment.text }}</p>
-        </li>
-      {% empty %}
-        <li>댓글이 없습니다.</li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% if user.is_authenticated %}
-  <form method="post" action="{% url 'blog_app:add_comment' post_id=post.id %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class='comment-button' type="submit">댓글 작성</button>
-  </form>
-  {% else %}
-    <p>댓글을 작성하려면 로그인이 필요합니다.</p>
-  {% endif %} 
-
 
   <!-- 다음글 표시 -->
   {% if next_post %}
