@@ -7,6 +7,7 @@
         <img src="{% static 'img/logo.png' %}" alt="" />
       </a>
     </div>
+    <audio onloadstart="this.volume=0.5" style="width:150px" src="{% static 'img/River_Changes.mp3' %}" controls ></audio>
     <div class="nav-buttons">
       <div class="nav-topics">
         <a href="{% url 'blog_app:post_list_by_topic' topic='일상' %}"

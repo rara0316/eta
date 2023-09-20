@@ -43,7 +43,7 @@ def login_view(request):
                     return redirect('blog_app:login')  # 로그인 후 이동할 페이지 이름
                 else:
                     # 슈퍼유저 계정이 아닌 경우 에러 메시지 처리
-                    form.add_error(None, "다시 입력해주세요.")
+                    form.add_error(None, "로그인정보가 틀렸습니다.")
                     
 
     return render(request, 'login.html', {'form': form})
@@ -198,7 +198,7 @@ def image_upload(request):
 
 
 # Chat gpt API 사용
-openai.api_key = "sk-"
+openai.api_key = ""
 
 # 글 자동완성 기능
 def autocomplete(request):

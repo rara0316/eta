@@ -90,7 +90,7 @@
     <p>댓글을 작성하려면 로그인이 필요합니다.</p>
   {% endif %} 
 
-
+<div>
   <!-- 다음글 표시 -->
   {% if next_post %}
     <div class="another-post-box">
@@ -116,6 +116,7 @@
       <p>{{ previous_post.created_at }}</p>
     </div>
   {% endif %}
+</div>
 </div>
 {% include 'footer.html' %}
 </body>

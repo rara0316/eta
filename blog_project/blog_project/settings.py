@@ -333,6 +333,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True #브라우저 닫을때 세션 종료
 
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS =["https://c7cd-2406-5900-3-422-18b1-d7b0-9cec-2f5d.ngrok-free.app","https://c7cd-2406-5900-3-422-18b1-d7b0-9cec-2f5d.ngrok-free.app/login/"]
+CSRF_TRUSTED_ORIGINS =["https://d70e-2406-5900-3-422-18b1-d7b0-9cec-2f5d.ngrok-free.app","https://d70e-2406-5900-3-422-18b1-d7b0-9cec-2f5d.ngrok-free.app/login/"]
  
 CSRF_COOKIE_SECURE = True
