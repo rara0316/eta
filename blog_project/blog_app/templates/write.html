@@ -161,7 +161,7 @@
       document.getElementById('ai-img').style.display = 'block';
   
       //기존 내용에 자동완성 된 내용 더함
-    data.message = data.message.replace(/\n/g, '<br>');
+    // data.message = data.message.replace(/\n/g, '<br>');
     aiAutoInToContent(data);
     })
     .catch(error => {
@@ -175,7 +175,7 @@
 
     function aiAutoInToContent(autocontent){
       let currentContent = localStorage.getItem("inputData");
-      autocontent.message = autocontent.message.replace(/\n/g, '<br>');
+      // autocontent.message = autocontent.message.replace(/\n/g, '<br>');
       result =    currentContent + autocontent.message 
       localStorage.setItem("inputData", result);
     }
